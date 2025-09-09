@@ -101,13 +101,13 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="relative z-10 px-4">
         <h1 className="text-5xl md:text-7xl font-bold">
-          Chef<span className="text-red-400">List</span>
+          Chef<span className="text-orange-400">List</span>
         </h1>
         <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto">
           Connect with Private Chefs for Memorable Group Dinners & Personalized
           Meal Plans
         </p>
-        <button className="mt-8 px-10 py-4 bg-red-500 text-white font-bold rounded-full text-lg hover:bg-red-600 transition-colors shadow-lg">
+        <button className="mt-8 px-10 py-4 bg-orange-500 text-white font-bold rounded-full text-lg hover:bg-orange-600 transition-colors shadow-lg">
           Sign Up Now
         </button>
       </div>
@@ -202,7 +202,7 @@ const ForumCard = ({ image, title, author, category }: any) => (
       <p className="text-sm text-red-500 font-semibold mb-1">{category}</p>
       <h3 className="font-bold text-lg mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4">By {author}</p>
-      <button className="w-full py-2 bg-red-100 text-slate-800 font-semibold rounded-lg hover:bg-red-200 transition-colors">
+      <button className="w-full py-2 bg-orange-100 text-slate-800 font-semibold rounded-lg hover:bg-red-200 transition-colors">
         Read
       </button>
     </div>
@@ -244,7 +244,7 @@ const RecipeCard = ({ image, title, category }: any) => (
   <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100">
     <img src={image} alt={title} className="w-full h-40 object-cover" />
     <div className="p-4">
-      <p className="text-sm text-red-500 font-semibold mb-1">{category}</p>
+      <p className="text-sm text-orange-500 font-semibold mb-1">{category}</p>
       <h3 className="font-bold text-md">{title}</h3>
     </div>
   </div>

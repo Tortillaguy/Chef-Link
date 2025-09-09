@@ -17,6 +17,6 @@ body {
 @layer components {
 
   button {
-    @apply cursor-pointer rounded-md bg-gray-800/40 px-4 py-1 hover:bg-red-500/40 transition-colors;
+    @apply cursor-pointer rounded-md bg-gray-800/40 px-4 py-1 hover:bg-orange-400/40 transition-colors;
   }
 }
