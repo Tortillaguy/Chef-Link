@@ -1,89 +1,215 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
+import React from "react";
+import { Menu, Search, UserCircle, Users } from "lucide-react";
 
-export function Welcome() {
+// Main component for the landing page
+export const LandingPage = () => {
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <div className="w-[500px] max-w-[100vw] p-4">
-            <img
-              src={logoLight}
-              alt="React Router"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src={logoDark}
-              alt="React Router"
-              className="hidden w-full dark:block"
-            />
+    <div className="bg-white min-h-screen font-sans text-gray-800">
+      <Header />
+      <main>
+        <HeroSection />
+        <ChefCreatorsSection />
+        <CommunityForumSection />
+        <TasteSelectionsSection />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+// Header Component
+const Header = () => {
+  return (
+    <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center text-white">
+      <button className="p-2 rounded-full bg-black bg-opacity-30 hover:bg-opacity-50 transition-colors">
+        <Menu size={24} />
+      </button>
+      <button className="px-6 py-2 bg-white text-gray-800 font-semibold rounded-full shadow-md hover:bg-gray-200 transition-colors">
+        Sign In
+      </button>
+    </header>
+  );
+};
+
+// Hero Section Component
+const HeroSection = () => {
+  return (
+    <section className="relative h-[70vh] md:h-[90vh] flex items-center justify-center text-white text-center">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+        }}
+      ></div>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="relative z-10 px-4">
+        <h1 className="text-5xl md:text-7xl font-bold">
+          Chef<span className="text-red-500">Link</span>
+        </h1>
+        <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto">
+          Connect with Private Chefs for Memorable Group Dinners & Personalized
+          Meal Plans
+        </p>
+        <button className="mt-8 px-10 py-4 bg-red-500 text-white font-bold rounded-full text-lg hover:bg-red-600 transition-colors shadow-lg">
+          Sign Up Now
+        </button>
+      </div>
+    </section>
+  );
+};
+
+// Card for Chef Creators
+const CreatorCard = ({ image, title, author, authorImage }) => (
+  <div className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
+    <img
+      src={image}
+      alt={title}
+      className="w-full h-32 object-cover rounded-lg mb-3"
+    />
+    <h3 className="font-semibold text-md mb-2">{title}</h3>
+    <div className="flex items-center text-sm text-gray-500">
+      <img
+        src={authorImage}
+        alt={author}
+        className="w-6 h-6 rounded-full mr-2"
+      />
+      <span>{author}</span>
+    </div>
+  </div>
+);
+
+// Chef Creators Section
+const ChefCreatorsSection = () => {
+  const creators = [
+    {
+      image:
+        "https://images.unsplash.com/photo-1583394293214-28ded15ee548?q=80&w=2070&auto=format&fit=crop",
+      title: "Italian Masterclass",
+      author: "Chef Isabella Rossi",
+      authorImage:
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=2070&auto=format&fit=crop",
+      title: "Secrets of French Pastry",
+      author: "Chef Antoine Dubois",
+      authorImage:
+        "https://plus.unsplash.com/premium_photo-1661778091956-15dbe6e47442?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1621852004164-729463996434?q=80&w=1949&auto=format&fit=crop",
+      title: "Authentic Japanese Ramen",
+      author: "Chef Kenji Tanaka",
+      authorImage:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1604147057169-4b0a1399a5a3?q=80&w=1974&auto=format&fit=crop",
+      title: "Vegan Comfort Food",
+      author: "Chef Maya Evans",
+      authorImage:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop",
+    },
+  ];
+
+  return (
+    <section className="py-16 px-4 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold">Chef Creators</h2>
+          <div className="flex items-center space-x-2">
+            <Search className="text-gray-500" />
+            <Users className="text-gray-500" />
           </div>
-        </header>
-        <div className="max-w-[300px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
-            </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {creators.map((creator, index) => (
+            <CreatorCard key={index} {...creator} />
+          ))}
         </div>
       </div>
-    </main>
+    </section>
   );
-}
+};
 
-const resources = [
-  {
-    href: "https://reactrouter.com/docs",
-    text: "React Router Docs",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M9.99981 10.0751V9.99992M17.4688 17.4688C15.889 19.0485 11.2645 16.9853 7.13958 12.8604C3.01467 8.73546 0.951405 4.11091 2.53116 2.53116C4.11091 0.951405 8.73546 3.01467 12.8604 7.13958C16.9853 11.2645 19.0485 15.889 17.4688 17.4688ZM2.53132 17.4688C0.951566 15.8891 3.01483 11.2645 7.13974 7.13963C11.2647 3.01471 15.8892 0.951453 17.469 2.53121C19.0487 4.11096 16.9854 8.73551 12.8605 12.8604C8.73562 16.9853 4.11107 19.0486 2.53132 17.4688Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://rmx.as/discord",
-    text: "Join Discord",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 24 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M15.0686 1.25995L14.5477 1.17423L14.2913 1.63578C14.1754 1.84439 14.0545 2.08275 13.9422 2.31963C12.6461 2.16488 11.3406 2.16505 10.0445 2.32014C9.92822 2.08178 9.80478 1.84975 9.67412 1.62413L9.41449 1.17584L8.90333 1.25995C7.33547 1.51794 5.80717 1.99419 4.37748 2.66939L4.19 2.75793L4.07461 2.93019C1.23864 7.16437 0.46302 11.3053 0.838165 15.3924L0.868838 15.7266L1.13844 15.9264C2.81818 17.1714 4.68053 18.1233 6.68582 18.719L7.18892 18.8684L7.50166 18.4469C7.96179 17.8268 8.36504 17.1824 8.709 16.4944L8.71099 16.4904C10.8645 17.0471 13.128 17.0485 15.2821 16.4947C15.6261 17.1826 16.0293 17.8269 16.4892 18.4469L16.805 18.8725L17.3116 18.717C19.3056 18.105 21.1876 17.1751 22.8559 15.9238L23.1224 15.724L23.1528 15.3923C23.5873 10.6524 22.3579 6.53306 19.8947 2.90714L19.7759 2.73227L19.5833 2.64518C18.1437 1.99439 16.6386 1.51826 15.0686 1.25995ZM16.6074 10.7755L16.6074 10.7756C16.5934 11.6409 16.0212 12.1444 15.4783 12.1444C14.9297 12.1444 14.3493 11.6173 14.3493 10.7877C14.3493 9.94885 14.9378 9.41192 15.4783 9.41192C16.0471 9.41192 16.6209 9.93851 16.6074 10.7755ZM8.49373 12.1444C7.94513 12.1444 7.36471 11.6173 7.36471 10.7877C7.36471 9.94885 7.95323 9.41192 8.49373 9.41192C9.06038 9.41192 9.63892 9.93712 9.6417 10.7815C9.62517 11.6239 9.05462 12.1444 8.49373 12.1444Z"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
-  },
-];
+// Community Forum Card
+const ForumCard = ({ image, title, author, category }) => (
+  <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100">
+    <img src={image} alt={title} className="w-full h-48 object-cover" />
+    <div className="p-4">
+      <p className="text-sm text-red-500 font-semibold mb-1">{category}</p>
+      <h3 className="font-bold text-lg mb-2">{title}</h3>
+      <p className="text-gray-600 text-sm mb-4">By {author}</p>
+      <button className="w-full py-2 bg-red-100 text-red-600 font-semibold rounded-lg hover:bg-red-200 transition-colors">
+        Read
+      </button>
+    </div>
+  </div>
+);
+
+// Community Forum Section
+const CommunityForumSection = () => {
+  const posts = [
+    {
+      image: "https://placehold.co/600x400/111827/ffffff?text=Chef+Cooking",
+      title: "Mastering the Art of Sous Vide",
+      author: "Chef Anton",
+      category: "Techniques",
+    },
+    {
+      image: "https://placehold.co/600x400/4d7c0f/ffffff?text=Fresh+Pasta",
+      title: "Community Favorite Pasta Dishes",
+      author: "Community",
+      category: "Community Forum",
+    },
+  ];
+  return (
+    <section className="bg-gray-50 py-16 px-4 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8">Community Forum</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {posts.map((post, index) => (
+            <ForumCard key={index} {...post} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Taste Selections Section (Placeholder)
+const TasteSelectionsSection = () => {
+  return (
+    <section className="py-16 px-4 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8">Taste Selections</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {/* Placeholder content */}
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="bg-gray-200 h-64 rounded-xl animate-pulse"
+            ></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Footer Component (Placeholder)
+const Footer = () => {
+  return (
+    <footer className="bg-gray-800 text-white py-8 px-4">
+      <div className="max-w-6xl mx-auto text-center">
+        <p>&copy; {new Date().getFullYear()} ChefLink. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+};
+
+export default LandingPage;
