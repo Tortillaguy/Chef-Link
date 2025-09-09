@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
 import { Menu, Search, Users } from "lucide-react";
-import { getWalletBySource, Wallets } from "polkadot-api/wallets";
 import {
   connectInjectedExtension,
+  getInjectedExtensions,
   type InjectedExtension,
 } from "polkadot-api/pjs-signer";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
+import { useAppStore } from "~/lib/store";
+import { shorthand } from "~/lib/util";
 
 // Main component for the landing page
 export const LandingPage = () => {
@@ -26,8 +29,11 @@ const SELECTED_EXTENSION = "selected-extension";
 
 // Sign In Button Component
 const SignInButton = () => {
-  const [wallets, setWallets] = useState<Wallets | null>(null);
-  const [extension, setExtension] = useState<InjectedExtension>();
+  const extensions: string[] = useMemo(() => getInjectedExtensions(), []);
+  const [extension, setExtension] = useState<InjectedExtension | undefined>();
+  const navigate = useNavigate();
+  const account = useAppStore((store) => store.account);
+  const setAccount = useAppStore((store) => store.setAccount);
 
   useEffect(() => {
     const wallet = window.localStorage.getItem(SELECTED_EXTENSION);
@@ -39,62 +45,46 @@ const SignInButton = () => {
     if (!extension) return;
     const accounts = extension.getAccounts();
     if (accounts.length > 0) {
-      accounts[0];
+      setAccount(accounts[0]);
     }
   }, [extension]);
 
-  const handleSignIn = async () => {
-    try {
-      // PAPI's getWallets will handle discovering installed wallet extensions.
-      const discoveredWallets = await Wallets.get();
-      setWallets(discoveredWallets);
+  const onConnect = async () => {
+    const selectedExtension = await connectInjectedExtension(extensions[0]);
 
-      if (discoveredWallets.get().length === 0) {
-        alert("No Polkadot wallet extensions found. Please install one.");
-        return;
-      }
-
-      // For this example, we'll connect to the first discovered wallet.
-      // In a real app, you would present a list of `discoveredWallets` to the user.
-      const firstWallet = discoveredWallets.get()[0];
-      const wallet = getWalletBySource(firstWallet.source);
-
-      // This will trigger the wallet's pop-up to request permission.
-      const connected = await wallet?.connect("ChefLink");
-
-      const accounts = await connected?.getAccounts();
-      const firstAccount = accounts?.[0];
-
-      if (firstAccount) {
-        console.log("Connected account:", firstAccount.address);
-        alert(`Connected with account: ${firstAccount.address}`);
-      } else {
-        alert("No accounts found in the selected wallet.");
-      }
-    } catch (error) {
-      console.error("Error connecting to wallet:", error);
-      alert("Error connecting to wallet. See console for details.");
-    }
+    setExtension(selectedExtension);
+    window.localStorage.setItem(SELECTED_EXTENSION, extensions[0]);
   };
 
+  const onDisconnect = () => {
+    extension?.disconnect();
+    setAccount(undefined);
+  };
+
+  const routeToProfile = () => navigate("/profile");
+
   return (
-    <button
-      onClick={handleSignIn}
-      className="px-6 py-2 bg-white text-gray-800 font-semibold rounded-full shadow-md hover:bg-gray-200 transition-colors"
-    >
-      Sign In
-    </button>
+    <div className="flex gap z-10">
+      <button
+        className="cursor-pointer"
+        onClick={account ? routeToProfile : onConnect}
+      >
+        {account ? shorthand(account.address) : "Connect"}
+      </button>
+      {!!account && <button onClick={onDisconnect}>⏻</button>}
+    </div>
   );
 };
 
 // Header Component
 const Header = () => {
+
   return (
     <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center text-white">
       <button className="p-2 rounded-full bg-black bg-opacity-30 hover:bg-opacity-50 transition-colors">
         <Menu size={24} />
       </button>
-      <SignInButton />
+      <SignInButton/>
     </header>
   );
 };
@@ -128,7 +118,7 @@ const HeroSection = () => {
 };
 
 // Card for Chef Creators
-const CreatorCard = ({ image, title, author, authorImage }) => (
+const CreatorCard = ({ image, title, author, authorImage }: any) => (
   <div className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
     <img
       src={image}
@@ -153,22 +143,22 @@ const ChefCreatorsSection = () => {
     {
       image:
         "https://images.unsplash.com/photo-1583394293214-28ded15ee548?q=80&w=2070&auto=format&fit=crop",
-      title: "Italian Masterclass",
+      title: "Secrets of French Pastry",
       author: "Chef Isabella Rossi",
       authorImage:
         "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
     },
     {
       image:
-        "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=2070&auto=format&fit=crop",
-      title: "Secrets of French Pastry",
+        "/chef2.png",
+      title: "Italian Cuisine",
       author: "Chef Antoine Dubois",
       authorImage:
         "https://plus.unsplash.com/premium_photo-1661778091956-15dbe6e47442?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       image:
-        "https://images.unsplash.com/photo-1621852004164-729463996434?q=80&w=1949&auto=format&fit=crop",
+        "/chef3.png",
       title: "Authentic Japanese Ramen",
       author: "Chef Kenji Tanaka",
       authorImage:
@@ -176,7 +166,7 @@ const ChefCreatorsSection = () => {
     },
     {
       image:
-        "https://images.unsplash.com/photo-1604147057169-4b0a1399a5a3?q=80&w=1974&auto=format&fit=crop",
+        "/chef1.png",
       title: "Vegan Comfort Food",
       author: "Chef Maya Evans",
       authorImage:
@@ -205,7 +195,7 @@ const ChefCreatorsSection = () => {
 };
 
 // Community Forum Card
-const ForumCard = ({ image, title, author, category }) => (
+const ForumCard = ({ image, title, author, category }: any) => (
   <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100">
     <img src={image} alt={title} className="w-full h-48 object-cover" />
     <div className="p-4">
@@ -223,13 +213,13 @@ const ForumCard = ({ image, title, author, category }) => (
 const CommunityForumSection = () => {
   const posts = [
     {
-      image: "https://placehold.co/600x400/111827/ffffff?text=Chef+Cooking",
+      image: "/steak.png",
       title: "Mastering the Art of Sous Vide",
       author: "Chef Anton",
       category: "Techniques",
     },
     {
-      image: "https://placehold.co/600x400/4d7c0f/ffffff?text=Fresh+Pasta",
+      image: "/pasta.png",
       title: "Community Favorite Pasta Dishes",
       author: "Community",
       category: "Community Forum",
@@ -249,19 +239,53 @@ const CommunityForumSection = () => {
   );
 };
 
-// Taste Selections Section (Placeholder)
+// Recipe Card
+const RecipeCard = ({ image, title, category }: any) => (
+  <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100">
+    <img src={image} alt={title} className="w-full h-40 object-cover" />
+    <div className="p-4">
+      <p className="text-sm text-red-500 font-semibold mb-1">{category}</p>
+      <h3 className="font-bold text-md">{title}</h3>
+    </div>
+  </div>
+);
+
+// Taste Selections Section
 const TasteSelectionsSection = () => {
+  const recipes = [
+    {
+      image:
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1780&auto=format&fit=crop",
+      title: "Fresh Summer Salad",
+      category: "Healthy",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1981&auto=format&fit=crop",
+      title: "Gourmet Pizza",
+      category: "Italian",
+    },
+    {
+      image:
+        "https://images.unsplash.com/photo-1529042410759-befb1204b468?q=80&w=1974&auto=format&fit=crop",
+      title: "Chocolate Lava Cake",
+      category: "Dessert",
+    },
+    {
+      image:
+        "/avocado_toast.png",
+      title: "Avocado Toast",
+      category: "Breakfast",
+    },
+  ];
+
   return (
     <section className="py-16 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-8">Taste Selections</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Placeholder content */}
-          {[1, 2, 3, 4].map((i) => (
-            <div
-              key={i}
-              className="bg-gray-200 h-64 rounded-xl animate-pulse"
-            ></div>
+          {recipes.map((recipe, index) => (
+            <RecipeCard key={index} {...recipe} />
           ))}
         </div>
       </div>
