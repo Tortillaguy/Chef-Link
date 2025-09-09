@@ -77,13 +77,12 @@ const SignInButton = () => {
 
 // Header Component
 const Header = () => {
-
   return (
     <header className="absolute top-0 left-0 right-0 z-10 p-4 flex justify-between items-center text-white">
       <button className="p-2 rounded-full bg-black bg-opacity-30 hover:bg-opacity-50 transition-colors">
         <Menu size={24} />
       </button>
-      <SignInButton/>
+      <SignInButton />
     </header>
   );
 };
@@ -102,7 +101,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="relative z-10 px-4">
         <h1 className="text-5xl md:text-7xl font-bold">
-          Chef<span className="text-red-500">Link</span>
+          Chef<span className="text-red-400">List</span>
         </h1>
         <p className="mt-4 text-lg md:text-2xl max-w-2xl mx-auto">
           Connect with Private Chefs for Memorable Group Dinners & Personalized
@@ -118,23 +117,28 @@ const HeroSection = () => {
 
 // Card for Chef Creators
 const CreatorCard = ({ image, title, author, authorImage }: any) => {
-  return <a href={`/chef/${author}`}  className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-    <img
-      src={image}
-      alt={title}
-      className="w-full h-32 object-cover rounded-lg mb-3"
-    />
-    <h3 className="font-semibold text-md mb-2">{title}</h3>
-    <div className="flex items-center text-sm text-gray-500">
+  return (
+    <a
+      href={`/chef/${author}`}
+      className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow"
+    >
       <img
-        src={authorImage}
-        alt={author}
-        className="w-6 h-6 rounded-full mr-2"
+        src={image}
+        alt={title}
+        className="w-full h-32 object-cover rounded-lg mb-3"
       />
-      <span>{author}</span>
-    </div>
-  </a>
-}
+      <h3 className="font-semibold text-md mb-2">{title}</h3>
+      <div className="flex items-center text-sm text-gray-500">
+        <img
+          src={authorImage}
+          alt={author}
+          className="w-6 h-6 rounded-full mr-2"
+        />
+        <span>{author}</span>
+      </div>
+    </a>
+  );
+};
 
 // Chef Creators Section
 const ChefCreatorsSection = () => {
@@ -148,24 +152,21 @@ const ChefCreatorsSection = () => {
         "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
     },
     {
-      image:
-        "/chef2.png",
+      image: "/chef2.png",
       title: "Italian Cuisine",
       author: "Chef Antoine Dubois",
       authorImage:
         "https://plus.unsplash.com/premium_photo-1661778091956-15dbe6e47442?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      image:
-        "/chef3.png",
+      image: "/chef3.png",
       title: "Authentic Japanese Ramen",
       author: "Chef Kenji Tanaka",
       authorImage:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop",
     },
     {
-      image:
-        "/chef1.png",
+      image: "/chef1.png",
       title: "Vegan Comfort Food",
       author: "Chef Maya Evans",
       authorImage:
@@ -271,8 +272,7 @@ const TasteSelectionsSection = () => {
       category: "Dessert",
     },
     {
-      image:
-        "/avocado_toast.png",
+      image: "/avocado_toast.png",
       title: "Avocado Toast",
       category: "Breakfast",
     },
@@ -297,7 +297,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800 text-white py-8 px-4">
       <div className="max-w-6xl mx-auto text-center">
-        <p>&copy; {new Date().getFullYear()} ChefLink. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} ChefList. All rights reserved.</p>
       </div>
     </footer>
   );
