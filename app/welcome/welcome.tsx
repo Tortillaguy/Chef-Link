@@ -13,7 +13,6 @@ import { shorthand } from "~/lib/util";
 export const LandingPage = () => {
   return (
     <div className="bg-white min-h-screen font-sans text-gray-800">
-      <Header />
       <main>
         <HeroSection />
         <ChefCreatorsSection />
@@ -118,8 +117,8 @@ const HeroSection = () => {
 };
 
 // Card for Chef Creators
-const CreatorCard = ({ image, title, author, authorImage }: any) => (
-  <div className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
+const CreatorCard = ({ image, title, author, authorImage }: any) => {
+  return <a href={`/chef/${author}`}  className="bg-gray-50 p-3 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
     <img
       src={image}
       alt={title}
@@ -134,8 +133,8 @@ const CreatorCard = ({ image, title, author, authorImage }: any) => (
       />
       <span>{author}</span>
     </div>
-  </div>
-);
+  </a>
+}
 
 // Chef Creators Section
 const ChefCreatorsSection = () => {
@@ -202,7 +201,7 @@ const ForumCard = ({ image, title, author, category }: any) => (
       <p className="text-sm text-red-500 font-semibold mb-1">{category}</p>
       <h3 className="font-bold text-lg mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4">By {author}</p>
-      <button className="w-full py-2 bg-red-100 text-red-600 font-semibold rounded-lg hover:bg-red-200 transition-colors">
+      <button className="w-full py-2 bg-red-100 text-slate-800 font-semibold rounded-lg hover:bg-red-200 transition-colors">
         Read
       </button>
     </div>
