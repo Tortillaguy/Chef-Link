@@ -1,87 +1,105 @@
-# Welcome to React Router!
+# ChefLink: Private Chef Social Platform
 
-A modern, production-ready template for building full-stack React applications using React Router.
+ChefLink is a social media platform designed to connect customers with private chefs. It serves two primary functions: allowing customers to hire chefs for group dinners and enabling them to subscribe to personalized meal plans.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+A key feature of the platform is the use of a blockchain-based escrow service to handle payments, ensuring trust and transparency for both chefs and customers.
 
-## Features
+## Table of Contents
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Development Guidelines](#development-guidelines)
+
+## Key Features
+
+### For Customers:
+
+- **Create a Profile**: Sign up to browse for chefs.
+- **Search & Filter**: Find chefs based on cuisine, location, and availability.
+- **View Chef Profiles**: Look at a chef's portfolio, reviews, and services offered.
+- **Book Group Dinners**: Hire a chef for a group dinner on a specific date.
+- **Request Meal Plans**: Get a personalized meal plan from a chef.
+- **Secure Payments**: Payments are held in a secure escrow smart contract until the service is confirmed as complete.
+
+### For Chefs:
+
+- **Create a Detailed Profile**: Showcase skills, experience, and menu examples.
+- **Set Availability**: List availability for group dinners.
+- **Offer Services**: Provide personalized meal plan services.
+- **Manage Bookings**: Accept or decline booking requests.
+- **Secure Payouts**: Receive payments securely once the service is marked as complete and funds are released from escrow.
+
+## Technology Stack
+
+The project is built with a modern tech stack, utilizing a monorepo structure to manage both the frontend application and the smart contract code.
+
+### Frontend
+
+- **Framework**: [React](https://react.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Routing**: [React Router](https://reactrouter.com/) (v6+)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+
+### Blockchain / Backend
+
+- **Language**: [Rust](https://www.rust-lang.org/)
+- **Smart Contract Framework**: [ink!](https://use.ink/)
+- **Functionality**: An escrow service to hold customer payments securely until the service is confirmed as completed.
+
+## Project Structure
+
+The codebase is organized as a monorepo. The frontend application follows a modern, route-centric structure.
+
+```
+/
+|-- /app              # React frontend application
+|   |-- /components   # Reusable, global UI components
+|   |-- /routes       # Route modules (loaders, actions, components)
+|   |-- /lib          # Utilities and helpers
+|   `-- root.tsx      # Root layout component
+|-- /contracts
+|   |-- /escrow       # The ink! smart contract code
+|   |   |-- /src
+|   |   |   `-- lib.rs # Main contract logic
+|   |   `-- Cargo.toml
+|-- package.json      # Root package.json for monorepo scripts
+`-- README.md
+```
 
 ## Getting Started
 
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [pnpm](https://pnpm.io/)
+- [Rust and Cargo](https://www.rust-lang.org/tools/install)
+- [cargo-contract](https://github.com/paritytech/cargo-contract)
+
 ### Installation
 
-Install the dependencies:
+1.  **Clone the repository:**
 
-```bash
-npm install
-```
+    ```bash
+    git clone https://github.com/your-username/chef-list.git
+    cd chef-list
+    ```
 
-### Development
+2.  **Install frontend dependencies:**
 
-Start the development server with HMR:
+    ```bash
+    pnpm install
+    ```
 
-```bash
-npm run dev
-```
+3.  **Build the smart contract:**
+    ```bash
+    cd contracts/escrow
+    cargo contract build
+    ```
 
-Your application will be available at `http://localhost:5173`.
+## Development Guidelines
 
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- **Code Style**: Follow standard practices for TypeScript and Rust. For the frontend, adhere to the conventions established by `create-react-app` and `shadcn/ui`.
+- **Frontend-Backend Interaction**: The React app interacts with the escrow smart contract for depositing, releasing, and disputing funds.
