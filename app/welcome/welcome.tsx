@@ -1,5 +1,10 @@
-import React from "react";
-import { Menu, Search, UserCircle, Users } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Menu, Search, Users } from "lucide-react";
+import { getWalletBySource, Wallets } from "polkadot-api/wallets";
+import {
+  connectInjectedExtension,
+  type InjectedExtension,
+} from "polkadot-api/pjs-signer";
 
 // Main component for the landing page
 export const LandingPage = () => {
@@ -17,6 +22,71 @@ export const LandingPage = () => {
   );
 };
 
+const SELECTED_EXTENSION = "selected-extension";
+
+// Sign In Button Component
+const SignInButton = () => {
+  const [wallets, setWallets] = useState<Wallets | null>(null);
+  const [extension, setExtension] = useState<InjectedExtension>();
+
+  useEffect(() => {
+    const wallet = window.localStorage.getItem(SELECTED_EXTENSION);
+    if (!wallet) return;
+    connectInjectedExtension(wallet).then(setExtension);
+  }, []);
+
+  useEffect(() => {
+    if (!extension) return;
+    const accounts = extension.getAccounts();
+    if (accounts.length > 0) {
+      accounts[0];
+    }
+  }, [extension]);
+
+  const handleSignIn = async () => {
+    try {
+      // PAPI's getWallets will handle discovering installed wallet extensions.
+      const discoveredWallets = await Wallets.get();
+      setWallets(discoveredWallets);
+
+      if (discoveredWallets.get().length === 0) {
+        alert("No Polkadot wallet extensions found. Please install one.");
+        return;
+      }
+
+      // For this example, we'll connect to the first discovered wallet.
+      // In a real app, you would present a list of `discoveredWallets` to the user.
+      const firstWallet = discoveredWallets.get()[0];
+      const wallet = getWalletBySource(firstWallet.source);
+
+      // This will trigger the wallet's pop-up to request permission.
+      const connected = await wallet?.connect("ChefLink");
+
+      const accounts = await connected?.getAccounts();
+      const firstAccount = accounts?.[0];
+
+      if (firstAccount) {
+        console.log("Connected account:", firstAccount.address);
+        alert(`Connected with account: ${firstAccount.address}`);
+      } else {
+        alert("No accounts found in the selected wallet.");
+      }
+    } catch (error) {
+      console.error("Error connecting to wallet:", error);
+      alert("Error connecting to wallet. See console for details.");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleSignIn}
+      className="px-6 py-2 bg-white text-gray-800 font-semibold rounded-full shadow-md hover:bg-gray-200 transition-colors"
+    >
+      Sign In
+    </button>
+  );
+};
+
 // Header Component
 const Header = () => {
   return (
@@ -24,9 +94,7 @@ const Header = () => {
       <button className="p-2 rounded-full bg-black bg-opacity-30 hover:bg-opacity-50 transition-colors">
         <Menu size={24} />
       </button>
-      <button className="px-6 py-2 bg-white text-gray-800 font-semibold rounded-full shadow-md hover:bg-gray-200 transition-colors">
-        Sign In
-      </button>
+      <SignInButton />
     </header>
   );
 };
